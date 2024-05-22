@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: client.dockerfile
+    ports:
+      - 5173:5173
+  backend:
+    container_name: backend
+    image: backend
+    build:
+      context: ./backend
+      dockerfile: backend.dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres?schema=public
+  prisma:
+    container_name: prisma
+    ports:
+      - 5555:5555
+    build:
+      context: ./backend
+      dockerfile: prisma.dockerfile
+  db:
+    container_name: db
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
