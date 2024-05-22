@@ -7,7 +7,7 @@ services:
       context: ./client
       dockerfile: client.dockerfile
     ports:
-      - 5173:5173
+      - 8080:8080
   backend:
     container_name: backend
     image: backend

@@ -22,6 +22,6 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' }
   },
   devServer: {
-    port: 5173,
+    port: 8080,
   },
 })
