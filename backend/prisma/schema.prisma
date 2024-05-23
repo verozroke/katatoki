@@ -13,9 +13,102 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id Int @id @default(autoincrement())
+  id       String @id @default(uuid())
+  username String
+  password String
+  bio      String
+  country  String
+  city     String
+  pronouns String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  avatarId    String?      @unique
+  avatar      Image?       @relation("UserAvatarToImage", fields: [avatarId], references: [id])
+  bannerId    String?      @unique
+  banner      Image?       @relation("UserBannerToImage", fields: [bannerId], references: [id])
+  collections Collection[]
+  followers   Follow[]     @relation("FollowToUser")
+  followed    Follow[]     @relation("FollowToFollower")
+  likes       Like[]       @relation("LikeToUser")
+}
+
+model Collection {
+  id          String @id @default(uuid())
+  name        String
+  description String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorId String
+  author   User      @relation(fields: [authorId], references: [id])
+  posts    Post[]    @relation("PostToCollection")
+  hashtags Hashtag[] @relation("HashtagToCollection")
+}
+
+model Post {
+  id      String @id @default(uuid())
+  name    String
+  caption String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  imageId      String
+  image        Image?     @relation("ImageToPost")
+  collectionId String
+  collection   Collection @relation("PostToCollection", fields: [collectionId], references: [id])
+  likes        Like[]     @relation("LikeToPost")
+}
+
+model Image {
+  id  String @id @default(uuid())
+  url String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postId     String? @unique
+  post       Post?   @relation("ImageToPost", fields: [postId], references: [id])
+  userAvatar User?   @relation("UserAvatarToImage")
+  userBanner User?   @relation("UserBannerToImage")
+}
+
+model Like {
+  id String @unique @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation("LikeToUser", fields: [userId], references: [id])
+  postId String
+  post   Post   @relation("LikeToPost", fields: [postId], references: [id])
+}
+
+model Follow {
+  id String @unique @default(uuid())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId     String
+  user       User   @relation("FollowToUser", fields: [userId], references: [id])
+  followerId String
+  follewer   User   @relation("FollowToFollower", fields: [followerId], references: [id])
+
+  @@id([followerId, userId])
+}
+
+model Hashtag {
+  id   String @id @default(uuid())
   name String
-  email String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  collections Collection[] @relation("HashtagToCollection")
 }
