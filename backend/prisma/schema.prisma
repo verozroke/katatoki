@@ -99,8 +99,6 @@ model Follow {
   user       User   @relation("FollowToUser", fields: [userId], references: [id])
   followerId String
   follewer   User   @relation("FollowToFollower", fields: [followerId], references: [id])
-
-  @@id([followerId, userId])
 }
 
 model Hashtag {
