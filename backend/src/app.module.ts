@@ -11,9 +11,10 @@ import { ImageModule } from './image/image.module';
 import { LikeModule } from './like/like.module';
 import { FollowModule } from './follow/follow.module';
 import { HashtagModule } from './hashtag/hashtag.module';
+import { PrismaModule } from 'prisma/prisma.module';
 
 @Module({
-  imports: [AuthModule, UserModule, CollectionModule, PostModule, ImageModule, LikeModule, FollowModule, HashtagModule],
+  imports: [AuthModule, UserModule, CollectionModule, PostModule, ImageModule, LikeModule, FollowModule, HashtagModule, PrismaModule],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
 })

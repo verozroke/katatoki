@@ -1,6 +1,5 @@
 # Base image
-FROM node:18
-
+FROM node
 WORKDIR /usr/src/app
 
 COPY package*.json ./
